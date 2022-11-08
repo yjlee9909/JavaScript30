@@ -58,9 +58,29 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  const keyWrap = document.querySelector('.keys');
+  const keyLists = keyWrap.querySelectorAll('.key');
 
+  // 키 입력 받아서 일치한다면 소리 출력하기
+  window.addEventListener('keydown', (e) => {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+
+    // audio가 없는 경우 stop
+    if(!audio) return;
+    // 음악 재생 시점을 0으로 만들어서 누를때마다 계속 처음 부분 재생
+    audio.currentTime = 0;
+    // play() 메소드를 사용해서 음악 재생
+    audio.play();
+    key.classList.toggle('playing');
+  });
+  keyLists.forEach(item => 
+      item.addEventListener('transitionend', e => {
+        // transform 속성이 아니라면 스킵
+        if (e.propertyName !== 'transform') return; 
+        // console.log(e.propertyName)
+        e.target.classList.remove('playing');
+      }));
 </script>
-
-
 </body>
 </html>
